@@ -27,15 +27,17 @@ extra-doc-files: CHANGELOG.md
 
 library
   exposed-modules:
-    App
+    Moe.App
 
   other-modules:
     BgmTV.Api
     BgmTV.Client
     BgmTV.Types
-    Config
-    Server
-    Server.Api.Bangumi
+    Moe.Config
+    Moe.Log
+    Moe.Middlewares
+    Moe.Server
+    Moe.Server.Api
 
   build-depends:
     aeson,
@@ -44,7 +46,10 @@ library
     http-client-tls,
     http-types,
     mtl,
+    persistent,
+    persistent-sqlite,
     pretty-simple,
+    resource-pool,
     rio,
     rio-orphans,
     servant,
@@ -59,10 +64,12 @@ library
   -- Base language which the package is written in.
   default-language: GHC2024
   default-extensions:
+    BlockArguments
     DuplicateRecordFields
     NoImplicitPrelude
     OverloadedRecordDot
     OverloadedStrings
+    RecordWildCards
 
   ghc-options:
     -Wall

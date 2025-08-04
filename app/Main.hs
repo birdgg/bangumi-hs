@@ -1,6 +1,6 @@
 module Main (main) where
 
-import App
+import Moe.App qualified as App
 
 main :: IO ()
-main = startApp
+main = App.main
