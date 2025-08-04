@@ -1,14 +1,11 @@
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-
-{-# HLINT ignore "Use newtype instead of data" #-}
-module BgmTV.Types.Subject where
+module BgmTV.Types where
 
 import Data.Aeson (FromJSON, ToJSON, object, parseJSON, toJSON, withObject, (.:), (.=))
-import Data.Text (Text)
-import GHC.Generics (Generic)
+import RIO
+import RIO.Text qualified as T
 
 -- | Pagination wrapper for API responses
-data Pagination a = Pagination
+newtype Pagination a = Pagination
     { pData :: [a]
     }
     deriving (Generic, Show)
@@ -20,11 +17,11 @@ instance (FromJSON a) => FromJSON (Pagination a) where
 
 -- | Image URLs in different sizes
 data Images = Images
-    { small :: Text
-    , grid :: Text
-    , large :: Text
-    , medium :: Text
-    , common :: Text
+    { small :: T.Text
+    , grid :: T.Text
+    , large :: T.Text
+    , medium :: T.Text
+    , common :: T.Text
     }
     deriving (Generic, Show)
 
@@ -32,12 +29,12 @@ instance FromJSON Images
 
 -- | Subject information from BGM.TV API
 data Subject = Subject
-    { platform :: Text
+    { platform :: T.Text
     , images :: Images
-    , image :: Text
+    , image :: T.Text
     , summary :: Text
-    , name :: Text
-    , name_cn :: Text
+    , name :: T.Text
+    , name_cn :: T.Text
     }
     deriving (Generic, Show)
 
@@ -54,7 +51,7 @@ instance ToJSON SubjectType where
     toJSON Life = toJSON (6 :: Int)
 
 -- | Filter options for subject search
-data SubjectFilter = SubjectFilter
+newtype SubjectFilter = SubjectFilter
     { subjectType :: Maybe [SubjectType]
     }
     deriving (Generic, Show)
@@ -67,12 +64,12 @@ mkSubjectFilter types = SubjectFilter{subjectType = Just types}
 
 -- | Query parameters for subject search
 data SubjectQuery = SubjectQuery
-    { keyword :: Text
+    { keyword :: T.Text
     , filter :: Maybe SubjectFilter
     }
     deriving (Generic, Show)
 
 instance ToJSON SubjectQuery
 
-mkSubjectQuery :: Text -> SubjectType -> SubjectQuery
+mkSubjectQuery :: T.Text -> SubjectType -> SubjectQuery
 mkSubjectQuery keyword t = SubjectQuery{keyword = keyword, filter = Just $ mkSubjectFilter [t]}

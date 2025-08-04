@@ -4,9 +4,9 @@ module Bangumi (
     someFunc,
 ) where
 
-import BgmTV.Api.Subject
+import BgmTV.Api
 import BgmTV.Client
-import BgmTV.Types.Subject
+import BgmTV.Types
 import Network.HTTP.Client qualified as Client
 import Network.HTTP.Client.TLS qualified as TLS
 import Servant.Client (runClientM)

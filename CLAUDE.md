@@ -31,7 +31,6 @@ The project currently depends on:
 - aeson (JSON handling)
 - servant/servant-client/servant-server (web API framework)
 - wai/warp (web application interface and server)
-- resource-pool (resource pooling)
 - pretty-simple (pretty printing)
 
 ## Architecture

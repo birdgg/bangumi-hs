@@ -1,7 +1,8 @@
 module BgmTV.Client where
 
-import Data.Text
 import Network.HTTP.Client qualified as Client
+import RIO
+import RIO.Text qualified as T
 import Servant.Client (BaseUrl (..), ClientEnv, Scheme (..), middleware, mkClientEnv)
 import Servant.Client.Core (Request, addHeader)
 import Servant.Client.Internal.HttpClient (ClientMiddleware)
@@ -9,7 +10,7 @@ import Servant.Client.Internal.HttpClient (ClientMiddleware)
 bgmBaseUrl :: BaseUrl
 bgmBaseUrl = BaseUrl Https "api.bgm.tv" 443 ""
 
-bgmUserAgent :: Text
+bgmUserAgent :: T.Text
 bgmUserAgent = "bangumi-hs"
 
 -- | Add User-Agent header to all requests

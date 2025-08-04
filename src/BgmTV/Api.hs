@@ -1,7 +1,7 @@
-module BgmTV.Api.Subject where
+module BgmTV.Api where
 
-import BgmTV.Types.Subject
-import Data.Proxy
+import BgmTV.Types
+import RIO (Proxy (..))
 import Servant.API
 import Servant.Client
 

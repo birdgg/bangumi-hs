@@ -1,8 +1,6 @@
 module Main (main) where
 
-import qualified Bangumi (someFunc)
+import App
 
 main :: IO ()
-main = do
-    putStrLn "Hello, Haskell!"
-    Bangumi.someFunc
+main = startApp
