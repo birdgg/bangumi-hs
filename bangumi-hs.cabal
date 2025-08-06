@@ -33,11 +33,11 @@ library
     BgmTV.Api
     BgmTV.Client
     BgmTV.Types
+    Moe.Api.Search
     Moe.Config
     Moe.Log
     Moe.Middlewares
     Moe.Server
-    Moe.Server.Api
 
   build-depends:
     aeson,
@@ -66,10 +66,13 @@ library
   default-extensions:
     BlockArguments
     DuplicateRecordFields
+    MultiWayIf
     NoImplicitPrelude
     OverloadedRecordDot
     OverloadedStrings
-    RecordWildCards
+    PartialTypeSignatures
+    TypeFamilies
+    ViewPatterns
 
   ghc-options:
     -Wall

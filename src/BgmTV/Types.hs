@@ -26,6 +26,7 @@ data Images = Images
     deriving (Generic, Show)
 
 instance FromJSON Images
+instance ToJSON Images
 
 -- | Subject information from BGM.TV API
 data Subject = Subject
@@ -39,6 +40,7 @@ data Subject = Subject
     deriving (Generic, Show)
 
 instance FromJSON Subject
+instance ToJSON Subject
 
 data SubjectType = Book | Anime | Music | Game | Life
     deriving (Generic, Show)

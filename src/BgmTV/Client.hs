@@ -4,9 +4,11 @@ module BgmTV.Client (
     HasBgmClientEnv,
     bgmClientEnvL,
     runBgm,
+    searchSubject,
     module BgmTV.Types,
 ) where
 
+import BgmTV.Api
 import BgmTV.Types
 import Network.HTTP.Client qualified as Client
 import RIO
@@ -20,20 +22,27 @@ newtype BgmClientEnv = BgmClientEnv {unBgmClientEnv :: ClientEnv}
 class HasBgmClientEnv env where
     bgmClientEnvL :: Lens' env BgmClientEnv
 
+instance HasBgmClientEnv BgmClientEnv where
+    bgmClientEnvL = id
+
 bgmBaseUrl :: BaseUrl
 bgmBaseUrl = BaseUrl Https "api.bgm.tv" 443 ""
 
 bgmUserAgent :: T.Text
 bgmUserAgent = "bangumi-hs"
 
--- | Add User-Agent header to all requests
+bgmApi :: Proxy BgmApi
+bgmApi = Proxy
+
+searchSubject :: SubjectQuery -> ClientM (Pagination Subject)
+searchSubject = client bgmApi
+
 addUserAgent :: Request -> Request
 addUserAgent = addHeader "User-Agent" bgmUserAgent
 
 bgmMiddleware :: ClientMiddleware
 bgmMiddleware oapp = oapp . addUserAgent
 
--- | Create a ClientEnv with User-Agent middleware
 mkBgmClientEnv :: Client.Manager -> IO BgmClientEnv
 mkBgmClientEnv manager = pure $ BgmClientEnv $ defaultClientEnv{middleware = bgmMiddleware}
   where

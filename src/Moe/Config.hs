@@ -54,7 +54,7 @@ instance HasLogFunc Config where
     logFuncL = lens (fst . logFunc) const
 
 instance HasBgmClientEnv Config where
-    bgmClientEnvL = bgmClientEnv
+    bgmClientEnvL = lens bgmClientEnv (\x y -> x{bgmClientEnv = y})
 
 {- |
 | Utilities
