@@ -1,7 +1,7 @@
 module Moe.Middlewares (addMiddlewares) where
 
 import Moe.Config
-import Network.HTTP.Types
+import Network.HTTP.Types.Status
 import Network.Wai
 import RIO
 

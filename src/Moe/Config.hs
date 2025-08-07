@@ -9,8 +9,10 @@ module Moe.Config (
 ) where
 
 import BgmTV.Client
+import Mikan.Client
 import Network.HTTP.Client (Manager)
 import RIO
+import Servant.Client
 import System.Environment
 
 {- |
@@ -45,6 +47,7 @@ data Config = Config
     , logFunc :: (LogFunc, IO ())
     , httpManager :: Manager
     , bgmClientEnv :: BgmClientEnv
+    , mikanClientEnv :: ClientEnv
     }
 
 data Environment = Development | Production
@@ -55,6 +58,9 @@ instance HasLogFunc Config where
 
 instance HasBgmClientEnv Config where
     bgmClientEnvL = lens bgmClientEnv (\x y -> x{bgmClientEnv = y})
+
+instance HasMikanClientEnv Config where
+    mikanClientEnvL = lens mikanClientEnv (\x y -> x{mikanClientEnv = y})
 
 {- |
 | Utilities

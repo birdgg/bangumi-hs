@@ -1,16 +1,19 @@
 module Moe.Api.Search where
 
 import BgmTV.Client
+import Mikan.Client
 import Moe.Config
 import RIO
 import RIO.Text qualified as T
+import Rss.Types
 import Servant.API
+import Servant.Client
 import Servant.Server
 
-type BangumiApi =
-    "bangumi"
-        :> ( "search" :> QueryParam "keyword" T.Text :> Get '[JSON] [Subject]
-        -- :<|> "rss" :> QueryParam "keyword" T.Text :> Get '[JSON] [Subject]
+type SearchApi =
+    "search"
+        :> ( "bangumi" :> QueryParam "keyword" T.Text :> Get '[JSON] [Subject]
+                :<|> "mikan" :> QueryParam "keyword" T.Text :> Get '[JSON] [MikanRssItem]
            )
 
 -- | Handlers
@@ -21,8 +24,16 @@ searchBangumiHandler (Just k) = do
     result <- liftIO $ runBgm (searchSubject (mkAnimeQuery k)) bgmClientEnv
     pure $ either (const []) (.pData) result
 
+searchMikanHandler :: (HasMikanClientEnv env) => Maybe T.Text -> AppM env [MikanRssItem]
+searchMikanHandler k = do
+    mikanClientEnv <- view mikanClientEnvL
+    result <- liftIO $ runClientM (searchMikan k) mikanClientEnv
+    case result of
+        Left _ -> throwIO $ err400{errBody = "some err"}
+        Right rss -> pure rss.items
+
 mkAnimeQuery :: T.Text -> SubjectQuery
 mkAnimeQuery k = mkSubjectQuery k Anime
 
-serverBangumi :: ServerT BangumiApi (AppM Config)
-serverBangumi = searchBangumiHandler
+serverSearch :: (HasBgmClientEnv env, HasMikanClientEnv env) => ServerT SearchApi (AppM env)
+serverSearch = searchBangumiHandler :<|> searchMikanHandler

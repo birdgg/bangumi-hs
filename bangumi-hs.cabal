@@ -33,17 +33,25 @@ library
     BgmTV.Api
     BgmTV.Client
     BgmTV.Types
+    Mikan.Api
+    Mikan.Client
+    Mikan.Types
     Moe.Api.Search
     Moe.Config
     Moe.Log
     Moe.Middlewares
     Moe.Server
+    Network.HTTP.Types.URL
+    Rss.Types
+    Servant.API.ContentTypes.RSS
 
   build-depends:
     aeson,
     base ^>=4.21.0.0,
+    extra,
     http-client,
     http-client-tls,
+    http-media,
     http-types,
     mtl,
     persistent,
@@ -52,10 +60,12 @@ library
     resource-pool,
     rio,
     rio-orphans,
+    scalpel-core,
     servant,
     servant-client,
     servant-client-core,
     servant-server,
+    tagsoup,
     wai,
     warp,
 

@@ -8,7 +8,7 @@ import Servant.API
 import Servant.Server
 
 type AppContext = '[]
-type AppApi = "api" :> BangumiApi
+type AppApi = "api" :> SearchApi
 
 proxyContext :: Proxy AppContext
 proxyContext = Proxy
@@ -20,7 +20,7 @@ convertApp :: Config -> AppM Config a -> Handler a
 convertApp cfg = Handler . ExceptT . try . runAppM cfg
 
 configServer :: ServerT AppApi (AppM Config)
-configServer = serverBangumi
+configServer = serverSearch
 
 server :: Config -> Server AppApi
 server cfg =

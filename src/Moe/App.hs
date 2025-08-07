@@ -1,6 +1,7 @@
 module Moe.App where
 
 import BgmTV.Client
+import Mikan.Client
 import Moe.Config
 import Moe.Log
 import Moe.Middlewares
@@ -38,6 +39,7 @@ acquireConfig = do
     logFunc <- createLogFunc
     httpManager <- newManager tlsManagerSettings
     bgm <- mkBgmClientEnv httpManager
+    mikan <- mkMikanClientEnv httpManager
     pure
         Config
             { logFunc = logFunc
@@ -45,4 +47,5 @@ acquireConfig = do
             , port = port
             , httpManager = httpManager
             , bgmClientEnv = bgm
+            , mikanClientEnv = mikan
             }
