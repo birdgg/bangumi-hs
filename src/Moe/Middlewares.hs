@@ -5,10 +5,6 @@ import Network.HTTP.Types.Status
 import Network.Wai
 import RIO
 
-{- |
-| Logging
-|
--}
 logStartRequest :: Request -> RIO LogFunc ()
 logStartRequest req =
     logDebug $

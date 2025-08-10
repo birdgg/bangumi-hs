@@ -44,6 +44,7 @@ library
     Network.HTTP.Types.URL
     Rss.Types
     Servant.API.ContentTypes.RSS
+    Servant.Util
 
   build-depends:
     aeson,
@@ -53,6 +54,7 @@ library
     http-client-tls,
     http-media,
     http-types,
+    megaparsec,
     mtl,
     persistent,
     persistent-sqlite,

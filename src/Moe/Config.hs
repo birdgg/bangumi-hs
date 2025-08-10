@@ -10,7 +10,6 @@ module Moe.Config (
 
 import BgmTV.Client
 import Mikan.Client
-import Network.HTTP.Client (Manager)
 import RIO
 import Servant.Client
 import System.Environment
@@ -45,8 +44,7 @@ data Config = Config
     { env :: Environment
     , port :: Int
     , logFunc :: (LogFunc, IO ())
-    , httpManager :: Manager
-    , bgmClientEnv :: BgmClientEnv
+    , bgmClientEnv :: ClientEnv
     , mikanClientEnv :: ClientEnv
     }
 

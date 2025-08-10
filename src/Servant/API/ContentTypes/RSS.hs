@@ -5,8 +5,6 @@ import Network.HTTP.Media qualified as M
 import RIO
 import RIO.ByteString qualified as B
 import RIO.Text qualified as T
-
--- import Rss.Types
 import Servant.API
 import Text.HTML.Scalpel.Core
 import Text.HTML.TagSoup qualified as TagSoup
@@ -20,6 +18,9 @@ class FromRss a where
     fromRss :: Scraper T.Text a
 
 instance (FromRss a) => MimeUnrender RSS a where
-    mimeUnrender _ bs = do
-        t <- first show $ T.decodeUtf8' $ B.toStrict bs
-        maybeToEither "Parse failed" $ scrape fromRss $ TagSoup.parseTags t
+    mimeUnrender _ = 
+        first show . T.decodeUtf8' . B.toStrict 
+        >=> maybeToEither "RSS parse failed" . scrapeRss
+      where
+        scrapeRss :: T.Text -> Maybe a
+        scrapeRss = scrape fromRss . TagSoup.parseTags

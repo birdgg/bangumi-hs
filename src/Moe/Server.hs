@@ -6,6 +6,7 @@ import Moe.Config (AppM, Config, runAppM)
 import RIO hiding (Handler)
 import Servant.API
 import Servant.Server
+import Servant.Util
 
 type AppContext = '[]
 type AppApi = "api" :> SearchApi
@@ -31,4 +32,4 @@ server cfg =
         configServer
 
 app :: Context AppContext -> Config -> Application
-app ctx = serveWithContext proxyApi ctx . server
+app ctx = serveWithContext proxyApi (jsonErrorFormatters :. ctx) . server

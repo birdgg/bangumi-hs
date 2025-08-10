@@ -45,7 +45,6 @@ acquireConfig = do
             { logFunc = logFunc
             , env = env
             , port = port
-            , httpManager = httpManager
             , bgmClientEnv = bgm
             , mikanClientEnv = mikan
             }
