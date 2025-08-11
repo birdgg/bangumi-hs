@@ -40,6 +40,7 @@ library
     Mikan.Types
     Moe.Api.Search
     Moe.Config
+    Moe.Database.Model
     Moe.Log
     Moe.Middlewares
     Moe.Server
@@ -60,6 +61,7 @@ library
     mtl,
     persistent,
     persistent-sqlite,
+    persistent-template,
     pretty-simple,
     resource-pool,
     rio,
@@ -70,6 +72,7 @@ library
     servant-client-core,
     servant-server,
     tagsoup,
+    time,
     wai,
     warp,
 
