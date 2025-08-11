@@ -28,6 +28,8 @@ extra-doc-files: CHANGELOG.md
 library
   exposed-modules:
     Moe.App
+    Moe.Parser.BgmParser
+    Moe.Parser.Internal.Util
 
   other-modules:
     BgmTV.Api
@@ -106,3 +108,38 @@ executable bangumi-hs
   hs-source-dirs: app
   -- Base language which the package is written in.
   default-language: GHC2024
+
+test-suite bangumi-hs-test
+  -- Base language which the package is written in.
+  default-language: GHC2024
+  -- The test module.
+  main-is: Main.hs
+  other-modules:
+    Moe.Parser.BgmParserSpec
+    Moe.Parser.Internal.UtilSpec
+  -- The test directory.
+  hs-source-dirs: test
+  -- Test dependencies.
+  build-depends:
+    bangumi-hs,
+    base ^>=4.21.0.0,
+    megaparsec,
+    rio,
+    tasty,
+    tasty-hunit,
+
+  -- Test framework.
+  type: exitcode-stdio-1.0
+  default-extensions:
+    BlockArguments
+    DuplicateRecordFields
+    MultiWayIf
+    NoImplicitPrelude
+    OverloadedRecordDot
+    OverloadedStrings
+    TypeFamilies
+    ViewPatterns
+
+  ghc-options:
+    -Wall
+    -Werror
