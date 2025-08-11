@@ -1,4 +1,4 @@
-module Moe.Middlewares (addMiddlewares) where
+module Moe.Middlewares where
 
 import Moe.Config
 import Network.HTTP.Types.Status

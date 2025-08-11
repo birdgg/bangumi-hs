@@ -33,22 +33,44 @@ The project currently depends on:
 - wai/warp (web application interface and server)
 - pretty-simple (pretty printing)
 - megaparsec (parser combinator library)
+- persistent/persistent-sqlite/persistent-template (database ORM)
 - tasty/tasty-hunit (testing framework)
 
 ## Architecture
 
 The project follows standard Haskell package structure:
 
-### Library Structure
+### Backend Structure (Haskell)
 - **src/Moe/App.hs**: Main application module
+- **src/Moe/Database/Model.hs**: Persistent database models
+  - `Bangumi` model with fields: titleZh, titleJp, season, cover, group, totalEps, currentEp, tags, rss
+  - Automatic migration support with `migrateAll`
 - **src/Moe/Parser/Internal/Util.hs**: Parser utilities for Chinese text processing
   - `parseChineseSeason`: Parses Chinese season indicators (第一季, 第二季, etc.)
   - `parseChineseNumber`: Parses Chinese numerals (一, 二, 三, etc.)
   - `parseNumber`: Parses Arabic numerals
 - **src/Moe/Parser/BgmParser.hs**: Bangumi title parsing functionality
+  - `BgmBangumi` data type with title and season fields
+  - `parseBangumiTitle`: Parses text like "怪兽8号第二季" into structured data
+
+### Frontend Structure (TypeScript/React)
+- **web/**: Modern React frontend with TypeScript
+  - **Framework**: Vite + React + TypeScript
+  - **UI Components**: shadcn/ui component library
+  - **Routing**: TanStack Router for type-safe routing
+  - **State Management**: Zustand stores
+  - **Styling**: Tailwind CSS with custom theming
+- **Key Features**:
+  - Authentication system (sign-in/sign-up/forgot-password)
+  - Dashboard with overview and analytics
+  - Settings pages (account, appearance, notifications)
+  - Search functionality with dialog interface
+  - Error handling pages (401, 403, 404, 500, 503)
+  - Responsive layout with sidebar navigation
+  - Dark/light theme support
 
 ### Executable
-- **app/Main.hs**: Executable entry point
+- **app/Main.hs**: Haskell backend executable entry point
 
 ### Test Structure
 - **test/Main.hs**: Test suite entry point
@@ -56,6 +78,8 @@ The project follows standard Haskell package structure:
   - Tests for `parseChineseSeason` (7 test cases)
   - Tests for `parseChineseNumber` (5 test cases)  
   - Tests for `parseNumber` (4 test cases)
+- **test/Moe/Parser/BgmParserSpec.hs**: Tests for bangumi title parsing
+  - Tests for `parseBangumiTitle` (7 test cases)
 
 The project uses:
 - GHC2024 language standard
@@ -64,14 +88,33 @@ The project uses:
 
 ## Testing
 
+### Backend Testing
 The project uses a modular test structure with Tasty framework:
 - Run all tests: `cabal test`
 - Tests are organized by module in separate spec files
-- Currently 16 tests covering Chinese text parsing functionality
+- Currently 23 tests covering Chinese text parsing and bangumi title parsing
+
+### Frontend Development
+Frontend development commands (from `web/` directory):
+- `npm install` or `bun install` - Install dependencies
+- `npm run dev` or `bun dev` - Start development server
+- `npm run build` or `bun run build` - Build for production
+- `npm run preview` or `bun preview` - Preview production build
+
+## Project Structure
+
+This is a full-stack bangumi (anime) management application with:
+- **Backend**: Haskell with Servant API, Persistent database, and Chinese text parsing
+- **Frontend**: Modern React TypeScript SPA with shadcn/ui components
+- **Database**: SQLite with Persistent ORM for bangumi metadata storage
+- **Architecture**: Clean separation between API server and frontend client
 
 ## Notes
 
-- The project focuses on parsing Chinese anime/bangumi titles and metadata
-- Uses megaparsec for robust text parsing with proper error handling
-- Modular architecture allows easy extension of parsing capabilities
-- MIT licensed project by birdgg
+- **Full-stack Application**: Combines Haskell backend API with React frontend
+- **Chinese Text Processing**: Specialized parsers for Chinese anime titles and season indicators
+- **Database-driven**: Persistent models for storing bangumi metadata
+- **Modern Frontend**: Uses latest React ecosystem (Vite, TanStack Router, shadcn/ui)
+- **Type Safety**: Both backend (Haskell) and frontend (TypeScript) are fully typed
+- **Modular Architecture**: Clean separation of concerns with extensible design
+- **MIT Licensed**: Open source project by birdgg

@@ -24,6 +24,9 @@ startApp env = do
         port :: Int
         port = env.port
 
+
+
+    logInfo "Server started"
     run port $
         addMiddlewares env $
             app context env
@@ -40,11 +43,13 @@ acquireConfig = do
     httpManager <- newManager tlsManagerSettings
     bgm <- mkBgmClientEnv httpManager
     mikan <- mkMikanClientEnv httpManager
+    pool <- createPool $ fst logFunc
     pure
         Config
             { logFunc = logFunc
             , env = env
             , port = port
+            , pool = pool
             , bgmClientEnv = bgm
             , mikanClientEnv = mikan
             }

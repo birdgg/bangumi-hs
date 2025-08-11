@@ -28,8 +28,6 @@ extra-doc-files: CHANGELOG.md
 library
   exposed-modules:
     Moe.App
-    Moe.Parser.BgmParser
-    Moe.Parser.Internal.Util
 
   other-modules:
     BgmTV.Api
@@ -38,11 +36,14 @@ library
     Mikan.Api
     Mikan.Client
     Mikan.Types
+    Moe.Api
     Moe.Api.Search
     Moe.Config
     Moe.Database.Model
     Moe.Log
     Moe.Middlewares
+    Moe.Parser.BgmParser
+    Moe.Parser.Internal.Util
     Moe.Server
     Network.HTTP.Types.URL
     Rss.Types
@@ -82,6 +83,8 @@ library
   default-language: GHC2024
   default-extensions:
     BlockArguments
+    DeriveAnyClass
+    DeriveGeneric
     DuplicateRecordFields
     MultiWayIf
     NoImplicitPrelude
@@ -118,8 +121,8 @@ test-suite bangumi-hs-test
   -- The test module.
   main-is: Main.hs
   other-modules:
-    Moe.Parser.BgmParserSpec
     Moe.Parser.Internal.UtilSpec
+
   -- The test directory.
   hs-source-dirs: test
   -- Test dependencies.
