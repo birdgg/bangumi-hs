@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Moe.App qualified as App
+import MoeWeb.Server qualified as App
 
 main :: IO ()
-main = App.main
+main = App.runMoe

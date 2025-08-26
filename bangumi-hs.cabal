@@ -1,58 +1,100 @@
 cabal-version: 3.4
 name: bangumi-hs
--- The package version.
--- See the Haskell package versioning policy (PVP) for standards
--- guiding when and how versions should be incremented.
--- https://pvp.haskell.org
--- PVP summary:     +-+------- breaking API changes
---                  | | +----- non-breaking API additions
---                  | | | +--- code changes with no API change
 version: 0.1.0.0
--- A short (one-line) description of the package.
--- synopsis:
--- A longer description of the package.
--- description:
 license: MIT
--- The file containing the license text.
 license-file: LICENSE
--- The package author(s).
 author: birdgg
--- An email address to which users can send suggestions, bug reports, and patches.
 maintainer: birdeggegg@gmail.com
--- A copyright notice.
--- copyright:
 build-type: Simple
--- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
 extra-doc-files: CHANGELOG.md
 
-library
-  exposed-modules:
-    Moe.App
+common deps
+  build-depends:
+    aeson,
+    base ^>=4.21.0.0,
+    bytestring,
+    text,
 
-  other-modules:
+common extensions
+  default-extensions:
+    BlockArguments
+    DeriveAnyClass
+    DeriveGeneric
+    DuplicateRecordFields
+    MultiWayIf
+    OverloadedRecordDot
+    OverloadedStrings
+    PartialTypeSignatures
+    TypeFamilies
+    ViewPatterns
+
+  default-language: GHC2024
+
+common ghc-options
+  ghc-options:
+    -Wall
+    -Werror
+
+library core
+  import: extensions, deps, ghc-options
+  hs-source-dirs: ./src/core
+  exposed-modules:
+    Moe.Environment
+    Moe.Model
+    Moe.Monad
+
+  build-depends:
+    effectful,
+    persistent,
+    persistent-sqlite,
+    persistent-template,
+
+library libs
+  import: extensions, deps, ghc-options
+  hs-source-dirs: ./src/libs
+  exposed-modules:
     BgmTV.Api
     BgmTV.Client
     BgmTV.Types
     Mikan.Api
     Mikan.Client
     Mikan.Types
-    Moe.Api
-    Moe.Api.Search
-    Moe.Config
-    Moe.Database.Model
-    Moe.Log
-    Moe.Middlewares
-    Moe.Parser.BgmParser
-    Moe.Parser.Internal.Util
-    Moe.Server
-    Network.HTTP.Types.URL
+    Network.Types.HTTP.URL
     Rss.Types
     Servant.API.ContentTypes.RSS
     Servant.Util
 
   build-depends:
-    aeson,
+    extra,
+    http-client,
+    http-client-tls,
+    http-media,
+    http-types,
+    scalpel-core,
+    servant,
+    servant-client,
+    servant-client-core,
+    servant-server,
+    tagsoup,
+    time,
+
+library moe-web
+  import: extensions, deps, ghc-options
+  hs-source-dirs: ./src/web
+  exposed-modules:
+    MoeWeb.Server
+
+  other-modules:
+    MoeWeb.API.Routes
+    MoeWeb.Routes
+    MoeWeb.Types
+
+  build-depends:
+    bangumi-hs:core,
+    bangumi-hs:libs,
     base ^>=4.21.0.0,
+    effectful,
+    exceptions,
     extra,
     http-client,
     http-client-tls,
@@ -65,8 +107,6 @@ library
     persistent-template,
     pretty-simple,
     resource-pool,
-    rio,
-    rio-orphans,
     scalpel-core,
     servant,
     servant-client,
@@ -75,77 +115,12 @@ library
     tagsoup,
     time,
     wai,
-    warp,
+    warp
 
-  -- Directories containing source files.
-  hs-source-dirs: src
-  -- Base language which the package is written in.
-  default-language: GHC2024
-  default-extensions:
-    BlockArguments
-    DeriveAnyClass
-    DeriveGeneric
-    DuplicateRecordFields
-    MultiWayIf
-    NoImplicitPrelude
-    OverloadedRecordDot
-    OverloadedStrings
-    PartialTypeSignatures
-    TypeFamilies
-    ViewPatterns
-
-  ghc-options:
-    -Wall
-    -Werror
-
-executable bangumi-hs
-  -- .hs or .lhs file containing the Main module.
+executable moe-server
+  import: extensions, ghc-options
   main-is: Main.hs
-  -- Modules included in this executable, other than Main.
-  -- other-modules:
-  -- LANGUAGE extensions used by modules in this package.
-  -- other-extensions:
-  -- Other library packages from which modules are imported.
   build-depends:
-    bangumi-hs,
     base ^>=4.21.0.0,
-
-  -- Directories containing source files.
+    bangumi-hs:moe-web,
   hs-source-dirs: app
-  -- Base language which the package is written in.
-  default-language: GHC2024
-
-test-suite bangumi-hs-test
-  -- Base language which the package is written in.
-  default-language: GHC2024
-  -- The test module.
-  main-is: Main.hs
-  other-modules:
-    Moe.Parser.Internal.UtilSpec
-
-  -- The test directory.
-  hs-source-dirs: test
-  -- Test dependencies.
-  build-depends:
-    bangumi-hs,
-    base ^>=4.21.0.0,
-    megaparsec,
-    rio,
-    tasty,
-    tasty-hunit,
-
-  -- Test framework.
-  type: exitcode-stdio-1.0
-  default-extensions:
-    BlockArguments
-    DuplicateRecordFields
-    MultiWayIf
-    NoImplicitPrelude
-    OverloadedRecordDot
-    OverloadedStrings
-    TypeFamilies
-    ViewPatterns
-
-  ghc-options:
-    -Wall
-    -Werror
