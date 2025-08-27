@@ -1,16 +1,13 @@
 module MoeWeb.Server where
 
--- import Control.Exception (bracket)
-
 import Control.Monad.Except qualified as Except
-import Data.Function
 import Effectful
 import Moe.Monad (MoeM)
 import MoeWeb.API.Routes qualified as API
 import MoeWeb.Routes
 import MoeWeb.Types
 import Network.Wai.Handler.Warp (run)
-import Servant (Application, Handler, Proxy (Proxy), serveWithContextT)
+import Servant (Application, Handler, serveWithContextT)
 import Servant.Server (Context (..))
 import Servant.Server.Generic (AsServerT)
 

@@ -2,7 +2,6 @@ module BgmTV.Types where
 
 import Data.Aeson (FromJSON, ToJSON, object, parseJSON, toJSON, withObject, (.:), (.=))
 import Data.Text qualified as T
-import GHC.Generics (Generic)
 
 -- | Pagination wrapper for API responses
 newtype Pagination a = Pagination

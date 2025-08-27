@@ -1,7 +1,6 @@
 module MoeWeb.Routes where
 
 import Servant.API
-import Servant.API.Generic
 
 import MoeWeb.API.Routes qualified as API
 

@@ -5,7 +5,6 @@ import Moe.Model
 import MoeWeb.Types
 
 import Servant
-import Servant.API.Generic
 
 type Routes = "api" :> NamedRoutes Routes'
 

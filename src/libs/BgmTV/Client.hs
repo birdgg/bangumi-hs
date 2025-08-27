@@ -11,7 +11,6 @@ import Network.HTTP.Client qualified as Client
 import Servant.Client
 import Servant.Client.Core (Request, addHeader)
 import Servant.Client.Internal.HttpClient (ClientMiddleware)
-import Data.Proxy
 
 -- newtype BgmClientEnv = BgmClientEnv {unBgmClientEnv :: ClientEnv}
 

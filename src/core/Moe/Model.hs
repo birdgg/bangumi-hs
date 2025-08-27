@@ -15,8 +15,6 @@
 
 module Moe.Model where
 
-import GHC.Generics
-
 import Data.Aeson
 import Database.Persist ()
 import Database.Persist.Sqlite ()
@@ -28,7 +26,7 @@ share
   [mkPersist sqlSettings, mkMigrate "migrateAll"]
   [persistLowerCase|
 Bangumi
-    name String
+    title String
     deriving Show Generic
 |]
 

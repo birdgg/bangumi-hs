@@ -6,7 +6,6 @@ import Network.Types.HTTP.URL
 import Rss.Types
 import Servant.API.ContentTypes.RSS
 import Text.HTML.Scalpel.Core qualified as Scalpel
-import GHC.Generics (Generic)
 
 
 data MikanRssItem = MikanRssItem {title :: T.Text, torrent :: URL} deriving (Show, Generic)

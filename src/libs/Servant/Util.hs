@@ -4,7 +4,6 @@ import Data.Aeson
 import Data.Text qualified as T
 import Servant.API
 import Servant.Server
-import GHC.Generics (Generic)
 
 -- | Required Query Parameter
 type RQueryParam = QueryParam' '[Required, Strict]

@@ -1,0 +1,2 @@
+- [ ] use relude
+- [ ] persistent with pool and reader effect

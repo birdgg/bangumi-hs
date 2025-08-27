@@ -5,7 +5,6 @@ import Mikan.Types
 import Servant.API
 import Servant.API.ContentTypes.RSS
 import Servant.Client
-import Data.Proxy
 
 type MikanRssApi = "RSS" :> "Search" :> QueryParam "searchstr" T.Text :> Get '[RSS] MikanRss
 
