@@ -12,14 +12,12 @@ common deps
   build-depends:
     aeson,
     base ^>=4.21.0.0,
-    bytestring,
-    text,
-    relude
+    relude,
 
-  mixins:  base hiding (Prelude)
-            , relude (Relude as Prelude)
-            , relude
-
+  mixins:
+    base hiding (Prelude),
+    relude (Relude as Prelude),
+    relude,
 
 common extensions
   default-extensions:
@@ -41,75 +39,36 @@ common ghc-options
     -Wall
     -Werror
 
-library core
+library moe
   import: extensions, deps, ghc-options
-  hs-source-dirs: ./src/core
-  exposed-modules:
-    Moe.Environment
-    Moe.Model
-    Moe.Monad
-
-  build-depends:
-    effectful,
-    persistent,
-    persistent-sqlite,
-    persistent-template,
-
-library libs
-  import: extensions, deps, ghc-options
-  hs-source-dirs: ./src/libs
-  exposed-modules:
-    BgmTV.Api
-    BgmTV.Client
-    BgmTV.Types
-    Mikan.Api
-    Mikan.Client
-    Mikan.Types
-    Network.Types.HTTP.URL
-    Rss.Types
-    Servant.API.ContentTypes.RSS
-    Servant.Util
-
-  build-depends:
-    http-client,
-    http-client-tls,
-    http-media,
-    http-types,
-    scalpel-core,
-    servant,
-    servant-client,
-    servant-client-core,
-    servant-server,
-    tagsoup,
-    time,
-
-library moe-web
-  import: extensions, deps, ghc-options
-  hs-source-dirs: ./src/web
+  hs-source-dirs: ./src/
   exposed-modules:
     MoeWeb.Server
 
   other-modules:
+    Moe.Environment
+    Moe.Environment.Config
+    Moe.Environment.Env
+    Moe.Model
+    Moe.Monad
     MoeWeb.API.Routes
     MoeWeb.Routes
     MoeWeb.Types
 
   build-depends:
-    bangumi-hs:core,
-    bangumi-hs:libs,
     base ^>=4.21.0.0,
     effectful,
-    exceptions,
-    extra,
+    effectful-th,
+    log-base,
+    log-effectful,
+    envparse,
     http-client,
     http-client-tls,
     http-media,
     http-types,
     megaparsec,
-    mtl,
-    persistent,
-    persistent-sqlite,
-    persistent-template,
+    migrant-core,
+    migrant-sqlite-simple,
     pretty-simple,
     resource-pool,
     scalpel-core,
@@ -117,15 +76,20 @@ library moe-web
     servant-client,
     servant-client-core,
     servant-server,
+    sqlite-simple,
     tagsoup,
+    text-display,
     time,
     wai,
-    warp
+    warp,
+    mtl,
+    colourista
 
 executable moe-server
   import: extensions, ghc-options
   main-is: Main.hs
   build-depends:
+    bangumi-hs:moe,
     base ^>=4.21.0.0,
-    bangumi-hs:moe-web,
+
   hs-source-dirs: app

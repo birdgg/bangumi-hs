@@ -1,2 +1,2 @@
-- [ ] use relude
-- [ ] persistent with pool and reader effect
+- [x] use relude
+- [ ] use sqlite simple with effectful
