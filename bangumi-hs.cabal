@@ -43,6 +43,7 @@ library moe
     MoeWeb.Server
 
   other-modules:
+    Effectful.SQLite
     Log.Backend.File
     Moe.Environment
     Moe.Environment.Config
@@ -84,6 +85,7 @@ library moe
     tagsoup,
     text-display,
     time,
+    unliftio-pool,
     wai,
     wai-log,
     warp,

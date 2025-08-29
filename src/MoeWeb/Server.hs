@@ -23,6 +23,7 @@ import Effectful.Concurrent
 import Effectful.Error.Static (prettyCallStack, runErrorWith)
 import Effectful.Fail (runFailIO)
 import Effectful.Reader.Static (runReader)
+import Effectful.SQLite (runDB)
 import Effectful.Time (runTime)
 
 import Moe.Environment
@@ -88,6 +89,7 @@ naturalTransform moeEnv logger app = do
     liftIO $
       Right
         <$> app
+        & runDB moeEnv.pool
         & runTime
         & runErrorWith
           ( \callstack err -> do
