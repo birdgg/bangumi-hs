@@ -4,25 +4,36 @@ import Colourista.IO (blueMessage)
 import Control.Exception (bracket)
 import Control.Monad.Except qualified as Except
 import Data.Function
+import Data.Pool qualified as Pool
 import Data.Proxy
 import Data.Text.Display (display)
+import Log
+import Network.Wai.Handler.Warp (
+  defaultSettings,
+  runSettings,
+  setOnException,
+  setPort,
+ )
+
+import Servant (Application, Context (..), Handler, ServerError (..), serveWithContextT)
+import Servant.Server.Generic (AsServerT)
 
 import Effectful
 import Effectful.Concurrent
+import Effectful.Error.Static (prettyCallStack, runErrorWith)
 import Effectful.Fail (runFailIO)
+import Effectful.Reader.Static (runReader)
+import Effectful.Time (runTime)
 
 import Moe.Environment
 import Moe.Environment.Env
 import Moe.Monad (MoeM)
 
-import Data.Pool qualified as Pool
+import Moe.Logging qualified as Logging
 import MoeWeb.API.Routes qualified as API
+import MoeWeb.Common.Tracing
 import MoeWeb.Routes
 import MoeWeb.Types
-import Network.Wai.Handler.Warp (run)
-import Servant (Application, Handler, serveWithContextT)
-import Servant.Server (Context (..))
-import Servant.Server.Generic (AsServerT)
 
 -- TODO: run database migration
 runMoe :: IO ()
@@ -34,25 +45,31 @@ runMoe = do
         runEff . withUnliftStrategy (ConcUnlift Ephemeral Unlimited) . runConcurrent $ do
           let baseURL = "http://localhost:" <> display env.httpPort
           liftIO $ blueMessage $ "🌺 Starting Moe server on " <> baseURL
-          runServer
-          -- let withLogger = Logging.makeLogger env.mltp.logger
-          -- withLogger
-          --   ( \appLogger ->
-          --       provideCallStack $ runServer appLogger env
-          --   )
+          let withLogger = Logging.makeLogger env.loggingDestination
+          withLogger
+            (\appLogger -> runServer appLogger env)
     )
 
-runServer :: (IOE :> es) => MoeM es ()
-runServer = do
-  let server = mkServer
-  liftIO $ run 3000 server
+runServer :: (IOE :> es) => Logger -> MoeEnv -> MoeM es ()
+runServer appLogger moeEnv = do
+  let server = mkServer appLogger moeEnv
+  let warpSettings =
+        setPort (fromIntegral moeEnv.httpPort) $
+          setOnException
+            ( handleExceptions
+                appLogger
+                moeEnv.environment
+            )
+            defaultSettings
+  liftIO $
+    runSettings warpSettings server
 
-mkServer :: Application
-mkServer =
+mkServer :: Logger -> MoeEnv -> Application
+mkServer logger moeEnv =
   serveWithContextT
     (Proxy @ServerRoutes)
     EmptyContext
-    naturalTransform
+    (naturalTransform moeEnv logger)
     moeServer
 
 shutdownMoe :: MoeEnv -> Eff '[IOE] ()
@@ -65,11 +82,26 @@ moeServer =
     { api = API.apiServer
     }
 
-naturalTransform :: MoeEff a -> Handler a
-naturalTransform app = do
+naturalTransform :: MoeEnv -> Logger -> MoeEff a -> Handler a
+naturalTransform moeEnv logger app = do
   result <-
     liftIO $
       Right
         <$> app
+        & runTime
+        & runErrorWith
+          ( \callstack err -> do
+              Log.logInfo "Server error" $
+                object
+                  [ "error_headers" .= map show (errHeaders err)
+                  , "error_http_code" .= errHTTPCode err
+                  , "error_reason_phrase" .= errReasonPhrase err
+                  , "exception" .= prettyCallStack callstack
+                  ]
+              pure . Left $ err
+          )
+        & Logging.runLog moeEnv.environment logger
+        & runConcurrent
+        & runReader moeEnv
         & runEff
   either Except.throwError pure result

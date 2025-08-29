@@ -51,6 +51,7 @@ library moe
     Moe.Model
     Moe.Monad
     MoeWeb.API.Routes
+    MoeWeb.Common.Tracing
     MoeWeb.Routes
     MoeWeb.Types
 

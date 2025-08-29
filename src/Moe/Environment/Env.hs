@@ -11,6 +11,7 @@ data MoeEnv = MoeEnv
   , dbFile :: String
   , httpPort :: Int
   , environment :: DeploymentEnv
+  , loggingDestination :: LoggingDestination
   , config :: MoeConfig
   }
   deriving stock (Generic)

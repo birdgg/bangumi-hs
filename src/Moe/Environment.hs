@@ -13,12 +13,12 @@ import Env (parse)
 import Moe.Environment.Config
 import Moe.Environment.Env
 
-mkPool
-  :: IOE :> es
-  => String -- Database access information
-  -> NominalDiffTime -- Allowed timeout
-  -> Int -- Number of connections
-  -> Eff es (Pool SQLite.Connection)
+mkPool ::
+  (IOE :> es) =>
+  String -> -- Database access information
+  NominalDiffTime -> -- Allowed timeout
+  Int -> -- Number of connections
+  Eff es (Pool SQLite.Connection)
 mkPool connectionInfo timeout' connections =
   liftIO $
     Pool.newPool $
@@ -42,6 +42,7 @@ configToEnv moeConfig = do
       , httpPort = moeConfig.httpPort
       , environment = moeConfig.environment
       , dbFile = dbFile
+      , loggingDestination = Json
       , config = moeConfig
       }
 

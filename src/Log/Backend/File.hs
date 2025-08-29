@@ -25,5 +25,7 @@ withJSONFileBackend ::
 withJSONFileBackend FileBackendConfig{destinationFile} action = withRunInIO $ \unlift -> do
   liftIO $ BS.hPutStrLn stdout $ BS.pack $ "Redirecting logs to " <> destinationFile
   logger <- liftIO $ Log.mkLogger "file-json" $ \msg -> liftIO $ do
-    BS.appendFile destinationFile (BSL.toStrict $ Aeson.encode msg <> "\n")
+    let str = BSL.toStrict $ Aeson.encode msg <> "\n"
+    BS.putStr str
+    BS.appendFile destinationFile str
   withLogger logger (unlift . action)
