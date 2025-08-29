@@ -2,6 +2,7 @@ module Moe.Environment.Env where
 
 import Data.Pool (Pool)
 import Database.SQLite.Simple qualified as SQLite
+import GHC.Generics (Generic)
 
 import Moe.Environment.Config
 

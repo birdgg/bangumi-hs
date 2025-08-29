@@ -12,12 +12,9 @@ common deps
   build-depends:
     aeson,
     base ^>=4.21.0.0,
-    relude,
-
-  mixins:
-    base hiding (Prelude),
-    relude (Relude as Prelude),
-    relude,
+    bytestring,
+    containers,
+    text,
 
 common extensions
   default-extensions:
@@ -46,9 +43,11 @@ library moe
     MoeWeb.Server
 
   other-modules:
+    Log.Backend.File
     Moe.Environment
     Moe.Environment.Config
     Moe.Environment.Env
+    Moe.Logging
     Moe.Model
     Moe.Monad
     MoeWeb.API.Routes
@@ -57,18 +56,22 @@ library moe
 
   build-depends:
     base ^>=4.21.0.0,
+    colourista,
     effectful,
     effectful-th,
-    log-base,
-    log-effectful,
     envparse,
     http-client,
     http-client-tls,
     http-media,
     http-types,
+    log-base,
+    log-effectful,
     megaparsec,
     migrant-core,
     migrant-sqlite-simple,
+    monad-time,
+    monad-time-effectful,
+    mtl,
     pretty-simple,
     resource-pool,
     scalpel-core,
@@ -81,9 +84,8 @@ library moe
     text-display,
     time,
     wai,
+    wai-log,
     warp,
-    mtl,
-    colourista
 
 executable moe-server
   import: extensions, ghc-options

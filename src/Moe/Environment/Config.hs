@@ -1,14 +1,16 @@
 module Moe.Environment.Config where
 
 import Data.Text.Display (Display (..))
-import Env
-  ( AsUnread (unread)
-  , Error (..)
-  , Parser
-  , def
-  , var
-  )
-import Env qualified as Env
+import Env (
+  AsUnread (unread),
+  Error (..),
+  Parser,
+  Reader,
+  def,
+  var,
+ )
+import GHC.Generics (Generic)
+import Text.Read (readMaybe)
 
 data DeploymentEnv
   = Production

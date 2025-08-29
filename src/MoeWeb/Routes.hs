@@ -2,6 +2,7 @@ module MoeWeb.Routes where
 
 import Servant.API
 
+import GHC.Generics (Generic)
 import MoeWeb.API.Routes qualified as API
 
 type ServerRoutes = NamedRoutes Routes
