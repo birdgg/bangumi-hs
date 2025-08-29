@@ -43,25 +43,39 @@ library moe
     MoeWeb.Server
 
   other-modules:
+    BgmTV.Api
+    BgmTV.Client
+    BgmTV.Types
     Effectful.SQLite
     Log.Backend.File
+    Mikan.Api
+    Mikan.Client
+    Mikan.Types
     Moe.Environment
     Moe.Environment.Config
     Moe.Environment.Env
     Moe.Logging
     Moe.Model
     Moe.Monad
-    MoeWeb.API.Routes
+    Moe.ThirdParty
+    MoeWeb.API.Errors
+    MoeWeb.API.Root
+    MoeWeb.API.Search
     MoeWeb.Common.Tracing
     MoeWeb.Routes
     MoeWeb.Types
+    Network.HTTP.Types.URL
+    Rss.Types
+    Servant.API.ContentTypes.RSS
+    Servant.Display
+    Servant.Util
 
   build-depends:
-    base ^>=4.21.0.0,
     colourista,
     effectful,
     effectful-th,
     envparse,
+    extra,
     http-client,
     http-client-tls,
     http-media,
@@ -74,7 +88,6 @@ library moe
     monad-time,
     monad-time-effectful,
     mtl,
-    pretty-simple,
     resource-pool,
     scalpel-core,
     servant,

@@ -13,5 +13,5 @@ import Servant.Client
 mikanBaseUrl :: BaseUrl
 mikanBaseUrl = BaseUrl Https "mikanani.me" 443 ""
 
-mkMikanClientEnv :: Client.Manager -> IO ClientEnv
-mkMikanClientEnv manager = pure $ mkClientEnv manager mikanBaseUrl
+mkMikanClientEnv :: Client.Manager -> ClientEnv
+mkMikanClientEnv manager = mkClientEnv manager mikanBaseUrl

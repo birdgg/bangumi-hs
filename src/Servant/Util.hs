@@ -1,26 +1,30 @@
+{-# OPTIONS_GHC -Wno-orphans #-}
+
 module Servant.Util where
 
 import Data.Aeson
 import Data.Text qualified as T
+import GHC.Generics
 import Servant.API
 import Servant.Server
 
 -- | Required Query Parameter
 type RQueryParam = QueryParam' '[Required, Strict]
 
--- | Throw ClientError as server 400 error
--- runClientM_ :: (MonadIO m, MonadThrow m) => ClientM a -> ClientEnv -> m a
--- runClientM_ clientM clientEnv =
---     liftIO (runClientM clientM clientEnv)
---         >>= either
---             (throwM . errClient)
---             pure
+{- | Throw ClientError as server 400 error
+runClientM_ :: (MonadIO m, MonadThrow m) => ClientM a -> ClientEnv -> m a
+runClientM_ clientM clientEnv =
+    liftIO (runClientM clientM clientEnv)
+        >>= either
+            (throwM . errClient)
+            pure
+-}
 
 -- Error Utils
 newtype ErrorResponse = ErrorResponse
-    { error :: T.Text
-    }
-    deriving (Generic, Show)
+  { error :: T.Text
+  }
+  deriving (Generic, Show)
 
 instance ToJSON ErrorResponse
 
@@ -39,7 +43,7 @@ instance ToJSON ErrorResponse
 
 jsonErr :: ServerError -> T.Text -> ServerError
 jsonErr err msg =
-    err
-        { errBody = encode $ ErrorResponse msg
-        , errHeaders = [("Content-Type", "application/json")]
-        }
+  err
+    { errBody = encode $ ErrorResponse msg
+    , errHeaders = [("Content-Type", "application/json")]
+    }

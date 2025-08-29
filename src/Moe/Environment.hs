@@ -5,13 +5,13 @@ import Data.Pool qualified as Pool
 import Data.Pool.Introspection (defaultPoolConfig)
 import Data.Time (NominalDiffTime)
 import Database.SQLite.Simple qualified as SQLite
-
 import Effectful
 import Effectful.Fail (Fail)
 import Env (parse)
-
 import Moe.Environment.Config
 import Moe.Environment.Env
+import Network.HTTP.Client
+import Network.HTTP.Client.TLS (tlsManagerSettings)
 
 mkPool ::
   (IOE :> es) =>
@@ -36,6 +36,7 @@ configToEnv :: (Fail :> es, IOE :> es) => MoeConfig -> Eff es MoeEnv
 configToEnv moeConfig = do
   let dbFile = getDbFile moeConfig.environment
   pool <- mkPool dbFile 60 10
+  httpManager <- liftIO $ newManager tlsManagerSettings
   pure $
     MoeEnv
       { pool = pool
@@ -43,6 +44,7 @@ configToEnv moeConfig = do
       , environment = moeConfig.environment
       , dbFile = dbFile
       , loggingDestination = Json
+      , httpManager = httpManager
       , config = moeConfig
       }
 

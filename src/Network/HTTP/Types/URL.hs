@@ -1,4 +1,4 @@
-module Network.Types.HTTP.URL (URL) where
+module Network.HTTP.Types.URL (URL) where
 
 import Data.Text qualified as T
 

@@ -1,5 +1,6 @@
 module Mikan.Api where
 
+import Data.Proxy
 import Data.Text qualified as T
 import Mikan.Types
 import Servant.API

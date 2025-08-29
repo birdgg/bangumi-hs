@@ -7,17 +7,6 @@ import Data.Function
 import Data.Pool qualified as Pool
 import Data.Proxy
 import Data.Text.Display (display)
-import Log
-import Network.Wai.Handler.Warp (
-  defaultSettings,
-  runSettings,
-  setOnException,
-  setPort,
- )
-
-import Servant (Application, Context (..), Handler, ServerError (..), serveWithContextT)
-import Servant.Server.Generic (AsServerT)
-
 import Effectful
 import Effectful.Concurrent
 import Effectful.Error.Static (prettyCallStack, runErrorWith)
@@ -25,16 +14,23 @@ import Effectful.Fail (runFailIO)
 import Effectful.Reader.Static (runReader)
 import Effectful.SQLite (runDB)
 import Effectful.Time (runTime)
-
+import Log
 import Moe.Environment
 import Moe.Environment.Env
-import Moe.Monad (MoeM)
-
 import Moe.Logging qualified as Logging
-import MoeWeb.API.Routes qualified as API
+import Moe.Monad (MoeM)
+import MoeWeb.API.Root qualified as API
 import MoeWeb.Common.Tracing
 import MoeWeb.Routes
 import MoeWeb.Types
+import Network.Wai.Handler.Warp (
+  defaultSettings,
+  runSettings,
+  setOnException,
+  setPort,
+ )
+import Servant (Application, Context (..), Handler, ServerError (..), serveWithContextT)
+import Servant.Server.Generic (AsServerT)
 
 -- TODO: run database migration
 runMoe :: IO ()

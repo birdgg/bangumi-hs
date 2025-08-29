@@ -1,2 +1,2 @@
-- [x] use relude
-- [ ] use sqlite simple with effectful
+- [x] use sqlite simple with effectful
+- [ ] database migration with atlasgo
