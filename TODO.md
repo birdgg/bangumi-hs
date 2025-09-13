@@ -1,2 +1,6 @@
 - [x] use sqlite simple with effectful
 - [ ] database migration with atlasgo
+- [ ] search bangumi using bgmtv, search rss with mikan
+- [ ] group folders like flora
+- [ ] Maybe generate typescript api defination with servant-typescript
+- [ ] Refactor: use mikan search

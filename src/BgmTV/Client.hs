@@ -4,14 +4,18 @@ module BgmTV.Client (
   module BgmTV.Types,
 ) where
 
-import BgmTV.Api
 import BgmTV.Types
 import Data.Proxy
 import Data.Text
 import Network.HTTP.Client qualified as Client
+import Servant.API hiding (addHeader)
 import Servant.Client
 import Servant.Client.Core (addHeader)
 import Servant.Client.Internal.HttpClient (ClientMiddleware)
+
+type SubjectApi = "search" :> "subjects" :> ReqBody '[JSON] SubjectQuery :> Post '[JSON] (Pagination Subject)
+
+type BgmApi = "v0" :> SubjectApi
 
 bgmApi :: Proxy BgmApi
 bgmApi = Proxy

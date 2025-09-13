@@ -21,7 +21,6 @@ common extensions
     BlockArguments
     DeriveAnyClass
     DeriveGeneric
-    DuplicateRecordFields
     MultiWayIf
     OverloadedRecordDot
     OverloadedStrings
@@ -43,10 +42,12 @@ library moe
     MoeWeb.Server
 
   other-modules:
-    BgmTV.Api
     BgmTV.Client
     BgmTV.Types
+    Data.Types.HTML
+    Data.Types.Rss
     Effectful.SQLite
+    Effectful.Servant
     Log.Backend.File
     Mikan.Api
     Mikan.Client
@@ -55,17 +56,16 @@ library moe
     Moe.Environment.Config
     Moe.Environment.Env
     Moe.Logging
-    Moe.Model
     Moe.Monad
+    Moe.Parser.Internal
     Moe.ThirdParty
-    MoeWeb.API.Errors
     MoeWeb.API.Root
     MoeWeb.API.Search
     MoeWeb.Common.Tracing
     MoeWeb.Routes
     MoeWeb.Types
     Network.HTTP.Types.URL
-    Rss.Types
+    Servant.API.ContentTypes.HTML
     Servant.API.ContentTypes.RSS
     Servant.Display
     Servant.Util
@@ -89,6 +89,7 @@ library moe
     monad-time-effectful,
     mtl,
     resource-pool,
+    safe-exceptions,
     scalpel-core,
     servant,
     servant-client,

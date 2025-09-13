@@ -1,10 +1,13 @@
-module Rss.Types where
+module Data.Types.Rss where
 
 import Data.Text qualified as T
+import GHC.Generics
 import Network.HTTP.Types.URL
 import Text.HTML.Scalpel.Core
 
-data Rss a = Rss {title :: T.Text, link :: URL, description :: T.Text, items :: [a]} deriving (Show)
+data Rss a = Rss
+  {title :: T.Text, link :: URL, description :: T.Text, items :: [a]}
+  deriving (Show, Generic)
 
 class FromRss a where
   fromRss :: Scraper T.Text a

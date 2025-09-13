@@ -25,14 +25,14 @@ export function SearchDialog({ open, setOpen }: Props) {
   console.log(data);
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen}>
+    <CommandDialog open={open} onOpenChange={setOpen} className="h-[600px]">
       <CommandInput
         placeholder="Search for bangumi..."
         onValueChange={setSearchValue}
       />
-      <div className="flex">
-        <div className="flex-1  border-r">
-          <CommandList>
+      <div className="flex flex-1 min-h-0">
+        <div className="flex-1 border-r min-h-0">
+          <CommandList className="h-full max-h-none overflow-auto">
             {isLoading && <CommandLoading>Fetching</CommandLoading>}
             {data.map((item: any) => (
               <CommandItem
@@ -50,7 +50,7 @@ export function SearchDialog({ open, setOpen }: Props) {
             ))}
           </CommandList>
         </div>
-        <div className="flex-1 p-4">
+        <div className="flex-1 p-4 overflow-auto min-h-0">
           {selectedResult ? (
             <div className="space-y-4">
               <div>

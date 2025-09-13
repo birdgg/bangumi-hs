@@ -1,22 +1,57 @@
 module Mikan.Types where
 
-import Data.Aeson
+import Data.Aeson (ToJSON)
 import Data.Text qualified as T
-import GHC.Generics
-import Network.HTTP.Types.URL
-import Rss.Types
-import Text.HTML.Scalpel.Core qualified as Scalpel
+import Data.Text.Read qualified as TR
+import Data.Types.HTML (FromHTML (..))
+import Data.Types.Rss (FromRss (..), Rss)
+import GHC.Generics (Generic)
+import Network.HTTP.Types.URL (URL)
+import Text.HTML.Scalpel.Core (attr, chroot, chroots, hasClass, text, (@:))
 
-data MikanRssItem = MikanRssItem {title :: T.Text, torrent :: URL}
+data RssItem = RssItem {rssTitle :: T.Text, rssTorrent :: URL}
   deriving (Show, Generic)
 
-type MikanRss = Rss MikanRssItem
+type MikanRss = Rss RssItem
 
-instance FromRss MikanRssItem where
+instance FromRss RssItem where
   fromRss = do
-    t <- Scalpel.text "title"
-    torr <- Scalpel.attr "url" "enclosure"
-    pure MikanRssItem{title = t, torrent = torr}
+    t <- text "title"
+    torr <- attr "url" "enclosure"
+    pure RssItem{rssTitle = t, rssTorrent = torr}
 
-instance ToJSON MikanRssItem
-instance FromJSON MikanRssItem
+instance ToJSON RssItem
+
+data Bangumi = Bangumi
+  { bangumiTitle :: T.Text
+  , bangumiId :: Maybe Int
+  }
+  deriving (Show, Generic)
+
+instance ToJSON Bangumi
+
+instance FromHTML Bangumi where
+  fromHTML =
+    Bangumi
+      <$> text ("div" @: [hasClass "an-text"])
+      <*> (extractId <$> attr "href" "a")
+
+newtype BangumiList = BangumiList [Bangumi] deriving (Generic, Show)
+
+instance ToJSON BangumiList
+
+instance FromHTML BangumiList where
+  fromHTML =
+    BangumiList
+      <$> chroot ("ul" @: [hasClass "an-ul"]) (chroots "li" fromHTML)
+
+{- | Extract numeric id from URLs like "/Home/Bangumi/3342".
+  Returns Nothing if no trailing integer segment is found.
+-}
+extractId :: T.Text -> Maybe Int
+extractId href =
+  case TR.decimal lastSeg of
+    Right (n, rest) | T.null rest -> Just n
+    _ -> Nothing
+ where
+  lastSeg = last (T.splitOn "/" href)

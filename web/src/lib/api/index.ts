@@ -23,6 +23,7 @@ const httpClient = ky.create({
 });
 
 async function searchBangumi(keyword: string) {
+  console.log("search bangumi");
   return httpClient
     .get("search/bangumi", {
       searchParams: {

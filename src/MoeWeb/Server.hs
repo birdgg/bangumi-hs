@@ -19,6 +19,7 @@ import Moe.Environment
 import Moe.Environment.Env
 import Moe.Logging qualified as Logging
 import Moe.Monad (MoeM)
+import Moe.ThirdParty (runThirdParty)
 import MoeWeb.API.Root qualified as API
 import MoeWeb.Common.Tracing
 import MoeWeb.Routes
@@ -31,6 +32,8 @@ import Network.Wai.Handler.Warp (
  )
 import Servant (Application, Context (..), Handler, ServerError (..), serveWithContextT)
 import Servant.Server.Generic (AsServerT)
+
+type MoeAuthContext = EmptyContext
 
 -- TODO: run database migration
 runMoe :: IO ()
@@ -87,6 +90,7 @@ naturalTransform moeEnv logger app = do
         <$> app
         & runDB moeEnv.pool
         & runTime
+        & runThirdParty
         & runErrorWith
           ( \callstack err -> do
               Log.logInfo "Server error" $

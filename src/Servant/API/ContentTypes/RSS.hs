@@ -7,8 +7,8 @@ import Data.Either.Extra
 import Data.List.NonEmpty
 import Data.Text qualified as T
 import Data.Text.Encoding qualified as T
+import Data.Types.Rss
 import Network.HTTP.Media qualified as M
-import Rss.Types
 import Servant.API
 import Text.HTML.Scalpel.Core
 import Text.HTML.TagSoup qualified as TagSoup

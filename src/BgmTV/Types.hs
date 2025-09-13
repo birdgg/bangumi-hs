@@ -2,18 +2,16 @@ module BgmTV.Types where
 
 import Data.Aeson (FromJSON, ToJSON, object, parseJSON, toJSON, withObject, (.:), (.=))
 import Data.Text qualified as T
-import GHC.Generics
+import GHC.Generics (Generic)
 
 -- | Pagination wrapper for API responses
-newtype Pagination a = Pagination
-  { pData :: [a]
-  }
+newtype Pagination a = Pagination {pData :: [a]}
   deriving (Generic, Show)
 
 instance (FromJSON a) => FromJSON (Pagination a) where
   parseJSON = withObject "Pagination" $ \o -> do
-    dat <- o .: "data"
-    return $ Pagination dat
+    d <- o .: "data"
+    return $ Pagination{pData = d}
 
 -- | Image URLs in different sizes
 data Images = Images
@@ -53,16 +51,14 @@ instance ToJSON SubjectType where
   toJSON Life = toJSON (6 :: Int)
 
 -- | Filter options for subject search
-newtype SubjectFilter = SubjectFilter
+data SubjectFilter = SubjectFilter
   { subjectType :: Maybe [SubjectType]
+  , metaTags :: Maybe [T.Text]
   }
   deriving (Generic, Show)
 
 instance ToJSON SubjectFilter where
-  toJSON (SubjectFilter types) = object ["type" .= types]
-
-mkSubjectFilter :: [SubjectType] -> SubjectFilter
-mkSubjectFilter types = SubjectFilter{subjectType = Just types}
+  toJSON (SubjectFilter types megaTags) = object ["type" .= types, "meta_tags" .= megaTags]
 
 -- | Query parameters for subject search
 data SubjectQuery = SubjectQuery
@@ -75,4 +71,8 @@ instance ToJSON SubjectQuery
 
 -- | Helper for search anime subject with keyword
 mkAnimeQuery :: T.Text -> SubjectQuery
-mkAnimeQuery keyword = SubjectQuery{keyword = keyword, filter = Just $ mkSubjectFilter [Anime]}
+mkAnimeQuery keyword =
+  SubjectQuery
+    { keyword = keyword
+    , filter = Just $ SubjectFilter{subjectType = Just [Anime], metaTags = Just ["日本"]}
+    }

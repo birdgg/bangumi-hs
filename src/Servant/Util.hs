@@ -11,15 +11,6 @@ import Servant.Server
 -- | Required Query Parameter
 type RQueryParam = QueryParam' '[Required, Strict]
 
-{- | Throw ClientError as server 400 error
-runClientM_ :: (MonadIO m, MonadThrow m) => ClientM a -> ClientEnv -> m a
-runClientM_ clientM clientEnv =
-    liftIO (runClientM clientM clientEnv)
-        >>= either
-            (throwM . errClient)
-            pure
--}
-
 -- Error Utils
 newtype ErrorResponse = ErrorResponse
   { error :: T.Text
